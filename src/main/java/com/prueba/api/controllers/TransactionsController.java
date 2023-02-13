@@ -1,0 +1,85 @@
+package com.prueba.api.controllers;
+
+import com.prueba.api.dtos.BasicResponse;
+import com.prueba.api.dtos.CustomResponse;
+import com.prueba.api.dtos.TransactionDTO;
+import com.prueba.api.services.IBasicCrudService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.sql.Date;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/movimientos")
+public class TransactionsController {
+
+    //TODO: Validar los campos en los dtos
+
+    @Qualifier("transactions")
+    private final IBasicCrudService<TransactionDTO> transactionsService;
+
+    @GetMapping("/obtener")
+    public ResponseEntity<CustomResponse<TransactionDTO>> getAllTransactions(
+            @RequestParam("fechaInicio") Date fechaInicio,
+            @RequestParam("fechaFin") Date fechaFin,
+            @RequestParam(value = "filtro", defaultValue = "") String filtro
+    ) {
+
+        CustomResponse<TransactionDTO> response = new CustomResponse<>();
+        response.setStatusCode(200);
+        response.setMessage("Todo bien");
+        response.setData(transactionsService.getAllByDate(fechaInicio, fechaFin, filtro));
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
+    }
+
+    @PostMapping("/crear")
+    public ResponseEntity<BasicResponse> createTransaction(@Valid @RequestBody TransactionDTO transactionDTO) {
+
+        transactionsService.create(transactionDTO);
+
+        BasicResponse response = new BasicResponse();
+        response.setStatusCode(200);
+        response.setMessage("Todo bien");
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
+
+    }
+
+    @PutMapping("/actualizar")
+    public ResponseEntity<BasicResponse> updateAccount(@Valid @RequestBody TransactionDTO accountDTO) {
+
+        transactionsService.update(accountDTO);
+
+        BasicResponse response = new BasicResponse();
+        response.setStatusCode(200);
+        response.setMessage("Todo bien");
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<BasicResponse> deleteAccount(@PathVariable Integer id) {
+
+        transactionsService.delete(id);
+
+        BasicResponse response = new BasicResponse();
+        response.setStatusCode(200);
+        response.setMessage("Todo bien");
+
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
+    }
+
+}
