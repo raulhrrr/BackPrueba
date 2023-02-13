@@ -86,7 +86,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"password\": \"ñalsdfjñ\",\r\n    \"status\": true,\r\n    \"person\": {\r\n        \"names\": \"Alejandor Suárez\",\r\n        \"gender\": \"M\",\r\n        \"age\": 25,\r\n        \"identification\": 1093751,\r\n        \"address\": \"Medellín\",\r\n        \"phone\": \"019847786\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"password\": \"ñalsdfjñ\",\r\n    \"status\": true,\r\n    \"person\": {\r\n        \"names\": \"Alejandor Suárez\",\r\n        \"gender\": \"M\",\r\n        \"age\": 25,\r\n        \"identification\": 1345151,\r\n        \"address\": \"Medellín\",\r\n        \"phone\": \"019847786\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -118,7 +118,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accountNumber\": \"234516\",\r\n    \"type\": \"Ahorros\",\r\n    \"initialBalance\": 2000000,\r\n    \"status\": true,\r\n    \"clientId\": 2\r\n}",
+							"raw": "{\r\n    \"accountNumber\": \"123415\",\r\n    \"type\": \"Ahorros\",\r\n    \"initialBalance\": 2200000,\r\n    \"status\": true,\r\n    \"clientId\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -145,7 +145,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 3,\r\n    \"accountNumber\": \"123456\",\r\n    \"type\": \"Corriente\",\r\n    \"initialBalance\": 2500000,\r\n    \"status\": true,\r\n    \"clientId\": 4\r\n}",
+							"raw": "{\r\n    \"id\": 2,\r\n    \"accountNumber\": \"123415\",\r\n    \"type\": \"Corriente\",\r\n    \"initialBalance\": 2200000,\r\n    \"status\": true,\r\n    \"clientId\": 2\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -171,7 +171,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/cuentas/obtener?filtro=123",
+							"raw": "{{url}}/cuentas/obtener?filtro=34",
 							"host": [
 								"{{url}}"
 							],
@@ -182,7 +182,7 @@
 							"query": [
 								{
 									"key": "filtro",
-									"value": "123"
+									"value": "34"
 								}
 							]
 						}
@@ -220,7 +220,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"type\": \"Deposito\",\r\n    \"accountId\": 4,\r\n    \"value\": -2000000,\r\n    \"status\": true\r\n}",
+							"raw": "{\r\n    \"type\": \"Retiro\",\r\n    \"accountId\": 1,\r\n    \"value\": -135000,\r\n    \"status\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -235,6 +235,145 @@
 							"path": [
 								"movimientos",
 								"crear"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener transacciones",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"Deposito\",\r\n    \"accountId\": 1,\r\n    \"value\": -200000,\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/movimientos/obtener?fechaInicio=2023-02-10&fechaFin=2023-02-15&filtro",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"obtener"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2023-02-10"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2023-02-15"
+								},
+								{
+									"key": "filtro",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Movimiento",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"type\": \"Deposito\",\r\n    \"accountId\": 1,\r\n    \"value\": 500000,\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/movimientos/actualizar",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"actualizar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Movimiento",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/movimientos/eliminar/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"movimientos",
+								"eliminar",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Movimientos Copy",
+			"item": [
+				{
+					"name": "Obtener transacciones por cliente",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"Deposito\",\r\n    \"accountId\": 1,\r\n    \"value\": -200000,\r\n    \"status\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/reportes/obtener?fechaInicio=2023-02-10&fechaFin=2023-02-15&clientId=1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"reportes",
+								"obtener"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2023-02-10"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2023-02-15"
+								},
+								{
+									"key": "clientId",
+									"value": "1"
+								}
 							]
 						}
 					},
