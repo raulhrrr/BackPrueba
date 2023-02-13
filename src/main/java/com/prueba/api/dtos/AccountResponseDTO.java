@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class AccountDTO {
+public class AccountResponseDTO {
 
     private Integer id;
 
@@ -19,10 +19,12 @@ public class AccountDTO {
     @JsonDeserialize(using = CustomAccountTypeDeserializer.class)
     private AccountType type;
 
+    private BigDecimal currentBalance;
+
     private BigDecimal initialBalance;
 
     private Boolean status;
 
-    private Integer clientId;
+    private ClientDTO client;
 
 }

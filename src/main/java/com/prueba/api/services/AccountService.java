@@ -1,6 +1,7 @@
 package com.prueba.api.services;
 
 import com.prueba.api.dtos.AccountDTO;
+import com.prueba.api.dtos.AccountResponseDTO;
 import com.prueba.api.entities.Account;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Qualifier("accounts")
-public class AccountService implements IBasicCrudService<AccountDTO> {
+public class AccountService implements IBasicCrudService<AccountDTO, AccountResponseDTO> {
 
     private final TransactionRepository transactionRepository;
     private final ClientRepository clientRepository;
@@ -31,17 +34,17 @@ public class AccountService implements IBasicCrudService<AccountDTO> {
     private final ModelMapper modelMapper;
 
     @Override
-    public Set<AccountDTO> getAll(String filter) {
-        Set<Account> accounts = accountRepository.getAllAccountsByFilter(filter);
-        List<Integer> accountsIds = accounts.stream().map(Account::getId).collect(Collectors.toList());
-
-
-
-        accounts.forEach(account -> {});
-        //BigDecimal currentBalance = transactionRepository.getCurrentBalance(dto.getAccountId());
-
-        return modelMapper.map(accounts, new TypeToken<Set<AccountDTO>>() {
+    public Set<AccountResponseDTO> getAll(String filter) {
+        Set<AccountResponseDTO> accounts = modelMapper.map(accountRepository.getAllAccountsByFilter(filter), new TypeToken<Set<AccountResponseDTO>>() {
         }.getType());
+
+        List<Integer> accountsIds = accounts.stream().map(AccountResponseDTO::getId).collect(Collectors.toList());
+        Map<Integer, BigDecimal> currentBalanceByAccountsIds = transactionRepository.getCurrentBalanceByAccountsIds(accountsIds).stream()
+                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class)));
+
+        accounts.forEach(account -> account.setCurrentBalance(currentBalanceByAccountsIds.get(account.getId())));
+
+        return accounts;
     }
 
     @Override

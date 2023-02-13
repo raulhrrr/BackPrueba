@@ -10,17 +10,17 @@ import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
-public class TransactionDTO {
+public class TransactionResponseDTO {
 
     private Integer id;
 
     @JsonDeserialize(using = CustomTransactionTypeDeserializer.class)
     private TransactionType type;
 
-    private Integer accountId;
-
     private BigDecimal value;
 
     private Boolean status;
+
+    private AccountResponseDTO account;
 
 }

@@ -3,20 +3,27 @@ package com.prueba.api.services;
 import java.sql.Date;
 import java.util.Set;
 
-public interface IBasicCrudService<T> {
+public interface IBasicCrudService<T, U> {
 
-    default Set<T> getAllByDate(Date fechaInicio, Date fechaFin, String filtro) {
+    default Set<U> getAll(String filtro) {
         return null;
     }
 
-    default Set<T> getAll(String filtro) {
+    default Set<U> getAllByDate(Date fechaInicio, Date fechaFin, String filtro) {
         return null;
     }
 
-    void create(T dto);
+    default Set<T> getByDatesAndId(Date fechaInicio, Date fechaFin, Integer clientId) {
+        return null;
+    }
 
-    void update(T dto);
+    default void create(T dto) {
+    }
 
-    void delete(Integer id);
+    default void update(T dto) {
+    }
+
+    default void delete(Integer id) {
+    }
 
 }

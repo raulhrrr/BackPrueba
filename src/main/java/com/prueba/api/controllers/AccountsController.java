@@ -1,6 +1,7 @@
 package com.prueba.api.controllers;
 
 import com.prueba.api.dtos.AccountDTO;
+import com.prueba.api.dtos.AccountResponseDTO;
 import com.prueba.api.dtos.BasicResponse;
 import com.prueba.api.dtos.CustomResponse;
 import com.prueba.api.services.IBasicCrudService;
@@ -19,12 +20,12 @@ public class AccountsController {
     //TODO: Validar los campos en los dtos
 
     @Qualifier("accounts")
-    private final IBasicCrudService<AccountDTO> accountService;
+    private final IBasicCrudService<AccountDTO, AccountResponseDTO> accountService;
 
     @GetMapping("/obtener")
-    public ResponseEntity<CustomResponse<AccountDTO>> getAllClients(@RequestParam(value = "filtro", defaultValue = "") String filtro) {
+    public ResponseEntity<CustomResponse<AccountResponseDTO>> getAllClients(@RequestParam(value = "filtro", defaultValue = "") String filtro) {
 
-        CustomResponse<AccountDTO> response = new CustomResponse<>();
+        CustomResponse<AccountResponseDTO> response = new CustomResponse<>();
         response.setStatusCode(200);
         response.setMessage("Todo bien");
         response.setData(accountService.getAll(filtro));

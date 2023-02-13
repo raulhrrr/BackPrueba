@@ -20,7 +20,7 @@ public class ClientController {
     //TODO: Validar los campos en los dtos
 
     @Qualifier("clients")
-    private final IBasicCrudService<ClientDTO> clientService;
+    private final IBasicCrudService<ClientDTO, ClientDTO> clientService;
 
     @GetMapping("/obtener")
     public ResponseEntity<CustomResponse<ClientDTO>> getAllClients(@RequestParam(value = "filtro", defaultValue = "") String filtro) {

@@ -3,6 +3,7 @@ package com.prueba.api.controllers;
 import com.prueba.api.dtos.BasicResponse;
 import com.prueba.api.dtos.CustomResponse;
 import com.prueba.api.dtos.TransactionDTO;
+import com.prueba.api.dtos.TransactionResponseDTO;
 import com.prueba.api.services.IBasicCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,16 +21,16 @@ public class TransactionsController {
     //TODO: Validar los campos en los dtos
 
     @Qualifier("transactions")
-    private final IBasicCrudService<TransactionDTO> transactionsService;
+    private final IBasicCrudService<TransactionDTO, TransactionResponseDTO> transactionsService;
 
     @GetMapping("/obtener")
-    public ResponseEntity<CustomResponse<TransactionDTO>> getAllTransactions(
+    public ResponseEntity<CustomResponse<TransactionResponseDTO>> getAllTransactions(
             @RequestParam("fechaInicio") Date fechaInicio,
             @RequestParam("fechaFin") Date fechaFin,
             @RequestParam(value = "filtro", defaultValue = "") String filtro
     ) {
 
-        CustomResponse<TransactionDTO> response = new CustomResponse<>();
+        CustomResponse<TransactionResponseDTO> response = new CustomResponse<>();
         response.setStatusCode(200);
         response.setMessage("Todo bien");
         response.setData(transactionsService.getAllByDate(fechaInicio, fechaFin, filtro));

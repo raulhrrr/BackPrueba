@@ -1,6 +1,7 @@
 package com.prueba.api.services;
 
 import com.prueba.api.dtos.TransactionDTO;
+import com.prueba.api.dtos.TransactionResponseDTO;
 import com.prueba.api.entities.Transaction;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
@@ -16,23 +17,25 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Qualifier("transactions")
-public class TransactionService implements IBasicCrudService<TransactionDTO> {
+public class TransactionService implements IBasicCrudService<TransactionDTO, TransactionResponseDTO> {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
     private final ModelMapper modelMapper;
 
     @Override
-    public Set<TransactionDTO> getAllByDate(Date startDate, Date endDate, String filter) {
+    public Set<TransactionResponseDTO> getAllByDate(Date startDate, Date endDate, String filter) {
         Set<Transaction> transactions = transactionRepository.getAllTransactionsByFilter(startDate, endDate, filter);
-        return modelMapper.map(transactions, new TypeToken<Set<TransactionDTO>>() {
+        return modelMapper.map(transactions, new TypeToken<Set<TransactionResponseDTO>>() {
         }.getType());
     }
 
@@ -43,7 +46,8 @@ public class TransactionService implements IBasicCrudService<TransactionDTO> {
             throw new EntityNotFoundException(String.format("No existe la cuenta con id %d", dto.getAccountId()));
         }
 
-        List<BigDecimal> currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId()));
+        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId())).stream()
+                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class))).get(dto.getAccountId());
         BigDecimal sum = currentBalance.add(dto.getValue());
 
         if (sum.compareTo(BigDecimal.ZERO) < 0) {
@@ -70,7 +74,8 @@ public class TransactionService implements IBasicCrudService<TransactionDTO> {
         }
 
         Optional<Transaction> transaction = transactionRepository.findById(dto.getId());
-        BigDecimal currentBalance = transactionRepository.getCurrentBalance(dto.getAccountId());
+        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId())).stream()
+                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class))).get(dto.getAccountId());
         BigDecimal newValue = currentBalance.add(transaction.map(transac -> transac.getValue().multiply(new BigDecimal("-1"))).orElse(BigDecimal.ZERO))
                 .add(dto.getValue());
 
@@ -82,7 +87,7 @@ public class TransactionService implements IBasicCrudService<TransactionDTO> {
 
         Transaction newTransaction = modelMapper.map(dto, Transaction.class);
         newTransaction.setBalance(newValue);
-        newTransaction.setCreatedAt(transaction.get().getCreatedAt());
+        newTransaction.setCreatedAt(transaction.isPresent() ? transaction.get().getCreatedAt() : LocalDateTime.now());
         transactionRepository.save(newTransaction);
 
     }
