@@ -67,7 +67,7 @@ public class ClientService implements IBasicCrudService<ClientDTO, ClientDTO> {
 
         Optional<Person> person = personRepository.getPersonByIdentificationAndId(id, identification);
 
-        if (person.isPresent()) {
+        if (person.isEmpty()) {
             throw new ConstraintViolationException(String.format("Ya existe una persona con la identificación %d", identification));
         }
 

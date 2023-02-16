@@ -5,6 +5,7 @@ import com.prueba.api.dtos.AccountResponseDTO;
 import com.prueba.api.entities.Account;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
+import com.prueba.api.projections.AccountCurrentBalance;
 import com.prueba.api.repositories.AccountRepository;
 import com.prueba.api.repositories.ClientRepository;
 import com.prueba.api.repositories.TransactionRepository;
@@ -39,8 +40,9 @@ public class AccountService implements IBasicCrudService<AccountDTO, AccountResp
         }.getType());
 
         List<Integer> accountsIds = accounts.stream().map(AccountResponseDTO::getId).collect(Collectors.toList());
+
         Map<Integer, BigDecimal> currentBalanceByAccountsIds = transactionRepository.getCurrentBalanceByAccountsIds(accountsIds).stream()
-                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class)));
+                .collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance));
 
         accounts.forEach(account -> account.setCurrentBalance(currentBalanceByAccountsIds.get(account.getId())));
 
@@ -82,7 +84,7 @@ public class AccountService implements IBasicCrudService<AccountDTO, AccountResp
 
         Optional<Account> accountOptional = accountRepository.getAccountByIdentificationAndId(id, accountNumber);
 
-        if (accountOptional.isPresent()) {
+        if (accountOptional.isEmpty()) {
             throw new ConstraintViolationException(String.format("Ya existe otro cliente con el número de cuenta %s", accountNumber));
         }
 

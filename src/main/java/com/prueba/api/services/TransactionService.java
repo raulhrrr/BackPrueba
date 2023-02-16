@@ -5,6 +5,7 @@ import com.prueba.api.dtos.TransactionResponseDTO;
 import com.prueba.api.entities.Transaction;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
+import com.prueba.api.projections.AccountCurrentBalance;
 import com.prueba.api.repositories.AccountRepository;
 import com.prueba.api.repositories.TransactionRepository;
 import com.prueba.api.utils.TransactionType;
@@ -46,8 +47,8 @@ public class TransactionService implements IBasicCrudService<TransactionDTO, Tra
             throw new EntityNotFoundException(String.format("No existe la cuenta con id %d", dto.getAccountId()));
         }
 
-        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId())).stream()
-                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class))).get(dto.getAccountId());
+        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId()))
+                .stream().collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance)).get(dto.getAccountId());
         BigDecimal sum = currentBalance.add(dto.getValue());
 
         if (sum.compareTo(BigDecimal.ZERO) < 0) {
@@ -74,8 +75,8 @@ public class TransactionService implements IBasicCrudService<TransactionDTO, Tra
         }
 
         Optional<Transaction> transaction = transactionRepository.findById(dto.getId());
-        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId())).stream()
-                .collect(Collectors.toMap(t -> t.get(0, Integer.class), t -> t.get(1, BigDecimal.class))).get(dto.getAccountId());
+        BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId()))
+                .stream().collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance)).get(dto.getAccountId());
         BigDecimal newValue = currentBalance.add(transaction.map(transac -> transac.getValue().multiply(new BigDecimal("-1"))).orElse(BigDecimal.ZERO))
                 .add(dto.getValue());
 

@@ -2,10 +2,10 @@ package com.prueba.api.repositories;
 
 import com.prueba.api.dtos.ReportResponseDTO;
 import com.prueba.api.entities.Transaction;
+import com.prueba.api.projections.AccountCurrentBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.persistence.Tuple;
 import java.sql.Date;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Query(nativeQuery = true, value = "select a.id as id, a.initial_balance + (" +
             "select ifnull(sum(t.value), 0) from transaction t where t.id_account = a.id) as balance " +
             "from account a where a.status = 1 and a.id in (?1)")
-    Set<Tuple> getCurrentBalanceByAccountsIds(List<Integer> accountId);
+    Set<AccountCurrentBalance> getCurrentBalanceByAccountsIds(List<Integer> accountId);
 
     @Query("select t " +
             "from Transaction t " +
