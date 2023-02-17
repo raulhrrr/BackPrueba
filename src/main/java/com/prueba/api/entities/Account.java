@@ -16,8 +16,6 @@ import java.util.Set;
 @Table(name = "account", schema = "back")
 public class Account {
 
-    // TODO: Incluir el saldo
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

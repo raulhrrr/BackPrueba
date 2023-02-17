@@ -16,8 +16,6 @@ import java.time.LocalDateTime;
 @Table(name = "transaction", schema = "back")
 public class Transaction {
 
-    // TODO: Incluir el saldo
-
     @Column(name = "created_at", nullable = false)
     public LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
