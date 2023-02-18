@@ -2,7 +2,7 @@ package com.prueba.api.controllers;
 
 import com.prueba.api.dtos.CustomResponse;
 import com.prueba.api.dtos.ReportResponseDTO;
-import com.prueba.api.services.IBasicCrudService;
+import com.prueba.api.services.ICrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.sql.Date;
 public class ReportController {
 
     @Qualifier("reports")
-    private final IBasicCrudService<ReportResponseDTO, ReportResponseDTO> reportsService;
+    private final ICrudService<ReportResponseDTO, ReportResponseDTO> reportsService;
 
     @GetMapping("/obtener")
     public ResponseEntity<CustomResponse<ReportResponseDTO>> getReport(

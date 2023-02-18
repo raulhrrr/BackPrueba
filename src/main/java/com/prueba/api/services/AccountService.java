@@ -5,7 +5,7 @@ import com.prueba.api.dtos.AccountResponseDTO;
 import com.prueba.api.entities.Account;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
-import com.prueba.api.projections.AccountCurrentBalance;
+import com.prueba.api.projections.IAccountCurrentBalance;
 import com.prueba.api.repositories.AccountRepository;
 import com.prueba.api.repositories.ClientRepository;
 import com.prueba.api.repositories.TransactionRepository;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Qualifier("accounts")
-public class AccountService implements IBasicCrudService<AccountDTO, AccountResponseDTO> {
+public class AccountService implements ICrudService<AccountDTO, AccountResponseDTO> {
 
     private final TransactionRepository transactionRepository;
     private final ClientRepository clientRepository;
@@ -42,7 +42,7 @@ public class AccountService implements IBasicCrudService<AccountDTO, AccountResp
         List<Integer> accountsIds = accounts.stream().map(AccountResponseDTO::getId).collect(Collectors.toList());
 
         Map<Integer, BigDecimal> currentBalanceByAccountsIds = transactionRepository.getCurrentBalanceByAccountsIds(accountsIds).stream()
-                .collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance));
+                .collect(Collectors.toMap(IAccountCurrentBalance::getId, IAccountCurrentBalance::getBalance));
 
         accounts.forEach(account -> account.setCurrentBalance(currentBalanceByAccountsIds.get(account.getId())));
 

@@ -20,7 +20,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Qualifier("clients")
-public class ClientService implements IBasicCrudService<ClientDTO, ClientDTO> {
+public class ClientService implements ICrudService<ClientDTO, ClientDTO> {
 
     private final ClientRepository clientRepository;
     private final PersonRepository personRepository;

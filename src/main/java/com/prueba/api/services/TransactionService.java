@@ -5,7 +5,7 @@ import com.prueba.api.dtos.TransactionResponseDTO;
 import com.prueba.api.entities.Transaction;
 import com.prueba.api.exceptions.BadObjectException;
 import com.prueba.api.exceptions.ConstraintViolationException;
-import com.prueba.api.projections.AccountCurrentBalance;
+import com.prueba.api.projections.IAccountCurrentBalance;
 import com.prueba.api.repositories.AccountRepository;
 import com.prueba.api.repositories.TransactionRepository;
 import com.prueba.api.utils.TransactionType;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Qualifier("transactions")
-public class TransactionService implements IBasicCrudService<TransactionDTO, TransactionResponseDTO> {
+public class TransactionService implements ICrudService<TransactionDTO, TransactionResponseDTO> {
 
     private final AccountRepository accountRepository;
     private final TransactionRepository transactionRepository;
@@ -48,7 +48,7 @@ public class TransactionService implements IBasicCrudService<TransactionDTO, Tra
         }
 
         BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId()))
-                .stream().collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance)).get(dto.getAccountId());
+                .stream().collect(Collectors.toMap(IAccountCurrentBalance::getId, IAccountCurrentBalance::getBalance)).get(dto.getAccountId());
         BigDecimal sum = currentBalance.add(dto.getValue());
 
         if (sum.compareTo(BigDecimal.ZERO) < 0) {
@@ -76,7 +76,7 @@ public class TransactionService implements IBasicCrudService<TransactionDTO, Tra
 
         Optional<Transaction> transaction = transactionRepository.findById(dto.getId());
         BigDecimal currentBalance = transactionRepository.getCurrentBalanceByAccountsIds(List.of(dto.getAccountId()))
-                .stream().collect(Collectors.toMap(AccountCurrentBalance::getId, AccountCurrentBalance::getBalance)).get(dto.getAccountId());
+                .stream().collect(Collectors.toMap(IAccountCurrentBalance::getId, IAccountCurrentBalance::getBalance)).get(dto.getAccountId());
         BigDecimal newValue = currentBalance.add(transaction.map(transac -> transac.getValue().multiply(new BigDecimal("-1"))).orElse(BigDecimal.ZERO))
                 .add(dto.getValue());
 

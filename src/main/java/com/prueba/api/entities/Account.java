@@ -24,7 +24,6 @@ public class Account {
     @Column(name = "account_number", unique = true)
     private String accountNumber;
 
-    //TODO: Revisar campo enum
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private AccountType type;

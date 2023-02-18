@@ -3,7 +3,7 @@ package com.prueba.api.controllers;
 import com.prueba.api.dtos.BasicResponse;
 import com.prueba.api.dtos.ClientDTO;
 import com.prueba.api.dtos.CustomResponse;
-import com.prueba.api.services.IBasicCrudService;
+import com.prueba.api.services.ICrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/clientes")
 public class ClientController {
 
-    //TODO: Validar los campos en los dtos
-
     @Qualifier("clients")
-    private final IBasicCrudService<ClientDTO, ClientDTO> clientService;
+    private final ICrudService<ClientDTO, ClientDTO> clientService;
 
     @GetMapping("/obtener")
     public ResponseEntity<CustomResponse<ClientDTO>> getAllClients(@RequestParam(value = "filtro", defaultValue = "") String filtro) {

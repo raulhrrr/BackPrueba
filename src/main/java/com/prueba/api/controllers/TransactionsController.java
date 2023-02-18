@@ -4,7 +4,7 @@ import com.prueba.api.dtos.BasicResponse;
 import com.prueba.api.dtos.CustomResponse;
 import com.prueba.api.dtos.TransactionDTO;
 import com.prueba.api.dtos.TransactionResponseDTO;
-import com.prueba.api.services.IBasicCrudService;
+import com.prueba.api.services.ICrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +18,8 @@ import java.sql.Date;
 @RequestMapping("/api/movimientos")
 public class TransactionsController {
 
-    //TODO: Validar los campos en los dtos
-
     @Qualifier("transactions")
-    private final IBasicCrudService<TransactionDTO, TransactionResponseDTO> transactionsService;
+    private final ICrudService<TransactionDTO, TransactionResponseDTO> transactionsService;
 
     @GetMapping("/obtener")
     public ResponseEntity<CustomResponse<TransactionResponseDTO>> getAllTransactions(

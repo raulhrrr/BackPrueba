@@ -14,7 +14,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Qualifier("reports")
-public class ReportService implements IBasicCrudService<ReportResponseDTO, ReportResponseDTO> {
+public class ReportService implements ICrudService<ReportResponseDTO, ReportResponseDTO> {
 
     private final TransactionRepository transactionRepository;
 

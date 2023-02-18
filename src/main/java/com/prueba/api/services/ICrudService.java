@@ -3,13 +3,13 @@ package com.prueba.api.services;
 import java.sql.Date;
 import java.util.Set;
 
-public interface IBasicCrudService<T, U> {
+public interface ICrudService<T, R> {
 
-    default Set<U> getAll(String filtro) {
+    default Set<R> getAll(String filtro) {
         return null;
     }
 
-    default Set<U> getAllByDate(Date fechaInicio, Date fechaFin, String filtro) {
+    default Set<R> getAllByDate(Date fechaInicio, Date fechaFin, String filtro) {
         return null;
     }
 

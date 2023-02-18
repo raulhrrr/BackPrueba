@@ -4,7 +4,7 @@ import com.prueba.api.dtos.AccountDTO;
 import com.prueba.api.dtos.AccountResponseDTO;
 import com.prueba.api.dtos.BasicResponse;
 import com.prueba.api.dtos.CustomResponse;
-import com.prueba.api.services.IBasicCrudService;
+import com.prueba.api.services.ICrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/cuentas")
 public class AccountsController {
 
-    //TODO: Validar los campos en los dtos
-
     @Qualifier("accounts")
-    private final IBasicCrudService<AccountDTO, AccountResponseDTO> accountService;
+    private final ICrudService<AccountDTO, AccountResponseDTO> accountService;
 
     @GetMapping("/obtener")
     public ResponseEntity<CustomResponse<AccountResponseDTO>> getAllClients(@RequestParam(value = "filtro", defaultValue = "") String filtro) {
