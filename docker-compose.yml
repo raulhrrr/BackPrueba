@@ -2,7 +2,7 @@ version: "3"
 services:
   springboot-app:
     container_name: spring-app
-    image: springbooot-app
+    image: springboot-app
     restart: on-failure
     depends_on:
       - mysqldb
